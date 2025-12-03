@@ -1,6 +1,7 @@
 const DEBUG_MODE = false;
 /* ----------------------------------------------------------------------------
   SmarterChat app Loader.
+  This file originates from https://github.com/smarter-sh/web-integration-example/blob/main/src/public/app-loader.js
 
   see:
   - https://cdn.platform.smarter.sh/ui-chat/app-loader.js
