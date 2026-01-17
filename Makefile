@@ -8,25 +8,25 @@
 BRANCH_NAME := $(shell git rev-parse --abbrev-ref HEAD)
 TARGET_FOLDER := ui-chat
 ifeq ($(BRANCH_NAME),main)
-    ENVIRONMENT := prod
-    BUCKET := platform.smarter.sh
-    DISTRIBUTION_ID := E3RBVI08PL6I04
-    URL := https://cdn.platform.smarter.sh/$(TARGET_FOLDER)/
+	ENVIRONMENT := prod
+	BUCKET := platform.smarter.sh
+	DISTRIBUTION_ID := E3RBVI08PL6I04
+	URL := https://cdn.platform.smarter.sh/$(TARGET_FOLDER)/
 else ifeq ($(BRANCH_NAME),alpha)
-    ENVIRONMENT := alpha
-    BUCKET := alpha.platform.smarter.sh
-    DISTRIBUTION_ID := E3JWACRWT53O2W
-    URL := https://cdn.alpha.platform.smarter.sh/$(TARGET_FOLDER)/
+	ENVIRONMENT := alpha
+	BUCKET := alpha.platform.smarter.sh
+	DISTRIBUTION_ID := E3JWACRWT53O2W
+	URL := https://cdn.alpha.platform.smarter.sh/$(TARGET_FOLDER)/
 else ifeq ($(BRANCH_NAME),beta)
-    ENVIRONMENT := beta
-    BUCKET := beta.platform.smarter.sh
-    DISTRIBUTION_ID := E35HUO4KP86MSQ
-    URL := https://cdn.beta.platform.smarter.sh/$(TARGET_FOLDER)/
+	ENVIRONMENT := beta
+	BUCKET := beta.platform.smarter.sh
+	DISTRIBUTION_ID := E35HUO4KP86MSQ
+	URL := https://cdn.beta.platform.smarter.sh/$(TARGET_FOLDER)/
 else
-    ENVIRONMENT := $(BRANCH_NAME)
-    BUCKET := no-bucket
-    DISTRIBUTION_ID := NO_DISTRIBUTION_ID
-    URL := ''
+	ENVIRONMENT := $(BRANCH_NAME)
+	BUCKET := no-bucket
+	DISTRIBUTION_ID := NO_DISTRIBUTION_ID
+	URL := ''
 endif
 
 S3_TARGET := s3://$(BUCKET)/$(TARGET_FOLDER)
@@ -38,13 +38,13 @@ export PATH := /usr/local/bin:$(PATH)
 export
 
 ifeq ($(OS),Windows_NT)
-    AWS_CLI := aws
-    PYTHON := python.exe
-    ACTIVATE_VENV := venv\Scripts\activate
+	AWS_CLI := aws
+	PYTHON := python.exe
+	ACTIVATE_VENV := venv\Scripts\activate
 else
-    AWS_CLI := /opt/homebrew/bin/aws
-    PYTHON := python3.12
-    ACTIVATE_VENV := source venv/bin/activate
+	AWS_CLI := /opt/homebrew/bin/aws
+	PYTHON := python3.12
+	ACTIVATE_VENV := source venv/bin/activate
 endif
 PIP := $(PYTHON) -m pip
 
@@ -125,6 +125,7 @@ build:
 	@echo 'Building the React app...'
 	rm -rf build
 	npm install
+	echo "VITE_ENVIRONMENT=$(ENVIRONMENT)"
 	export VITE_ENVIRONMENT=$(ENVIRONMENT) && npm run build
 
 aws-verify-bucket:
@@ -134,7 +135,7 @@ aws-verify-bucket:
 	@echo 'Checking if the S3 bucket $(BUCKET) exists...'
 	$(AWS_CLI) s3 ls $(BUCKET) || { echo "aws s3 bucket $(BUCKET) does not exist. Aborting."; exit 1; }
 	@echo 'Checking if the S3 bucket folder $(S3_TARGET) exists...'
-	$(AWS_CLI) s3 ls $(S3_TARGET) || $(AWS_CLI) s3 put-object --bucket $(BUCKET) --key $(TARGET_FOLDER)/
+	$(AWS_CLI) s3 ls $(S3_TARGET) || $(AWS_CLI) s3api put-object --bucket $(BUCKET) --key $(TARGET_FOLDER)/
 
 aws-sync-s3:
     # ------------------------

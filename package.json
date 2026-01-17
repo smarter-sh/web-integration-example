@@ -1,6 +1,6 @@
 {
   "name": "@smarter.sh/workbench",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "React.js chat console for the https://platform.smarter.sh developer workbench.",
   "homepage": "https://platform.smarter.sh",
   "main": "dist/index.js",
@@ -46,7 +46,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@smarter.sh/ui-chat": "0.2.10",
+    "@smarter.sh/ui-chat": "0.2.14",
     "dotenv": "^17.0.0"
   },
   "devDependencies": {

@@ -9,6 +9,7 @@ const env = loadEnv("production", process.cwd(), "");
 let subdomain = "alpha.";
 
 let environment = env.VITE_ENVIRONMENT || "alpha";
+console.log("vite.config.ts: environment:", environment);
 
 switch (environment) {
   case "alpha":
@@ -21,7 +22,7 @@ switch (environment) {
     subdomain = "";
     break;
   default:
-    console.log("constants.js: unrecognized git branch. Using alpha as default", environment);
+    console.log("vite.config.ts: unrecognized git branch. Using alpha as default", environment);
     subdomain = "alpha.";
 }
 // see smarter_settings.environment_cdn_url
