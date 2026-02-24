@@ -111,22 +111,33 @@ https://github.com/smarter-sh/smarter-chat",
 
 (function () {
   const url = new URL(window.location.href);
+
+  if (DEBUG_MODE === true) {
+    console.log("VITE_ROOT_DOMAIN:", import.meta.env.VITE_ROOT_DOMAIN);
+    console.log("VITE_PLATFORM_SUBDOMAIN:", import.meta.env.VITE_PLATFORM_SUBDOMAIN);
+    console.log("VITE_SUBDOMAIN:", import.meta.env.VITE_SUBDOMAIN);
+  }
+
+  const baseDomain = import.meta.env.VITE_PLATFORM_SUBDOMAIN + "." +import.meta.env.VITE_ROOT_DOMAIN;
+  const subdomain = import.meta.env.VITE_SUBDOMAIN ? import.meta.env.VITE_SUBDOMAIN + "." : "";
+  const cdnDomain = subdomain + baseDomain;
+
   let protocol = url.protocol;
   const hostname = url.hostname;
   const domain = (() => {
     switch (hostname) {
       case "localhost":
         protocol = "https:";
-        return "alpha.platform.smarter.sh";
+        return cdnDomain;
       case "localhost:8000":
         protocol = "https:";
-        return "alpha.platform.smarter.sh";
+        return cdnDomain;
       case "127.0.0.1":
         protocol = "https:";
-        return "alpha.platform.smarter.sh";
+        return cdnDomain;
       case "127.0.0.1:8000":
         protocol = "https:";
-        return "alpha.platform.smarter.sh";
+        return cdnDomain;
       default:
         return hostname;
     }
