@@ -6,8 +6,9 @@
 
 # Smarter Workbench
 
-A react.js app built from SmarterChat, an npm component. This project contains the source code for the interactive chatbot found in the Smarter web console [developer workbench](https://platform.smarter.sh/chatbots/example/). This is a working example of how to integrate SmarterChat into
-existing web pages; in this case, a Django project. See [Smarter Technical Overview](./doc/README.md)
+Demonstrates the basic pattern for integrating a SmarterChat npm component into an existing web page. This is a generic integration pattern that is intended to facilitate plugin tool development for any ecosystem, including for example, Microsoft Dynamics, Microsoft Sharepoint, SAP, salesforce.com, Wordpress, Drupal, Wix, Squarespace, Shopify, and others.
+
+Injects a lightweight react.js app into the DOM. The app itself is freely downloadable at [@smarter.sh/ui-chat](https://www.npmjs.com/package/@smarter.sh/ui-chat), or alternatively you can fork [https://github.com/smarter-sh/smarter-chat](https://github.com/smarter-sh/smarter-chat). See [Smarter Technical Overview](./doc/README.md)
 
 ![Basic Usage](./doc/img/readme-usage4.png)
 
@@ -20,20 +21,23 @@ Implementation example:
 ```js
 // THIS REPO:
 // 1. set this value in './src/shared/constants'
-export const CDN_HOST_BASE_URL = "https://cdn.platform.smarter.sh/";
+export const CDN_HOST_BASE_URL = "https://cdn.platform.example.com/";
+export VITE_ROOT_DOMAIN=example.com
+export VITE_PLATFORM_SUBDOMAIN=platform
+
 ```
 
 ```html
 <!-- YOUR EXISTING WEB PAGE: -->
 <!-- 2. add a react 'root' element to your DOM that react can locate and initialize itself.  -->
 <div
-  id="root"
-  smarter-chatbot-api-url="https://my-ai-agent.1234-5678-9012.platform.smarter.sh/"
+  id="example-com-v1-ui-chat-root"
+  smarter-chatbot-api-url="https://my-ai-agent.1234-5678-9012.platform.example.com/"
   smarter-toggle-metadata="false"
 ></div>
 
 <!-- 3. add a script element pointing to the `app-loader.js` found in the build artifacts -->
-<script src="https://cdn.platform.smarter.sh/ui-chat/app-loader.js"></script>
+<script src="https://cdn.platform.example.com/ui-chat/app-loader.js"></script>
 ```
 
 ```console
@@ -56,7 +60,7 @@ SmarterChat is created with [React](https://react.dev/) leveraging [@chatscope/c
 ### Backend integration
 
 See [Getting Started with the Smarter Chatbot Api](./doc/CHATBOT_API.md)
-This app interacts with two endpoints from the [smarter.sh/v1](https://platform.smarter.sh/docs/api/) chatbot api:
+This app interacts with two endpoints from the [smarter.sh/v1](https://docs.smarter.sh/en/latest/smarter-framework/smarter-api.html) chatbot api:
 
 - GET `/config/`: retrieves a json dict, structured in 4 major sections, with all information required by the react app.
 - POST `/chat/`: send a text completion prompt to the Smarter Api.
@@ -64,17 +68,17 @@ This app interacts with two endpoints from the [smarter.sh/v1](https://platform.
 Smarter chatbot urls use either of these three naming conventions:
 
 - public: `https://<str:name>.<str:account_number>.example.com/`
-- authenticated: `https://platform.smarter.sh/chatbots/<str:name>/`. This react component looks for and adds the Smarter platform sessionid cookie value to request headers, if it exists.
-- authenticated api: `https://platform.smarter.sh/api/v1/chatbots/<int:chatbot_id>/`
+- authenticated: `https://platform.example.com/chatbots/<str:name>/`. This react component looks for and adds the Smarter platform sessionid cookie value to request headers, if it exists.
+- authenticated api: `https://platform.example.com/api/v1/chatbots/<int:chatbot_id>/`
 
 Public api url examples for a deployed chatbot:
 
-- `https://my-chatbot.3141-5926-5359.api.smarter.sh/`
+- `https://my-chatbot.3141-5926-5359.api.example.com/`
 
 Authenticated api url example for any chatbot in your Smarter account:
 
-- `https://platform.smarter.sh/chatbots/my-chatbot/`
-- `https://platform.smarter.sh/api/v1/chatbots/5/`
+- `https://platform.example.com/chatbots/my-chatbot/`
+- `https://platform.example.com/api/v1/chatbots/5/`
 
 #### Config
 
@@ -86,7 +90,7 @@ See: [sample config](./data/sample-config.json)
 #### Api
 
 A REST Api for sending and receiving vendor agnostic LLM text completion 'prompt' requests. The request body, generated entirely by the [@smarter.sh/ui-chat](https://www.npmjs.com/package/@smarter.sh/ui-chat) ReactJS npm component, is a superset of the [OpenAI Api](https://platform.openai.com/docs/overview) prompt specification. The url comes from the config dict (above): data.chatbot.url_chatbot.
-example: `http://api.smarter.sh/v1/chatbots/smarter/example/`
+example: `http://api.example.com/v1/chatbots/smarter/example/`
 
 example http request:
 
@@ -134,11 +138,11 @@ example http response:
 - `make init`: Setup your environment for first time use. sets up your Node environment for you. initializes pre-commit, which you need to run prior to creating pull requests.
 - `make run`: Run the dev server locally
 - `make build`: Build the react.js project. saves vite.js output to `./build` in the root of this project.
-- `make release`: Deploy the react.js project. **REQUIRES awscli + keypair with sufficient permissions**. Publishes the contents of the `./build` folder to an AWS S3 bucket served by the host defined by the value of `CDN_HOST_BASE_URL` located in shared/constant.js. For example, the react app for the Smarter workbench is initialized and served from these endpoints: a. [index.html](https://cdn.platform.smarter.sh/ui-chat/index.html): the react app build artifacts, and b. [app-loader.js](https://cdn.platform.smarter.sh/ui-chat/app-loader.js): a script to insert the react app build artifacts into the DOM.
+- `make release`: Deploy the react.js project. **REQUIRES awscli + keypair with sufficient permissions**. Publishes the contents of the `./build` folder to an AWS S3 bucket served by the host defined by the value of `CDN_HOST_BASE_URL` located in vite.config.js. For example, the react app for the Smarter workbench is initialized and served from these endpoints: a. [index.html](https://cdn.smarter.sh/ui-chat/index.html): the react app build artifacts, and b. [app-loader.js](https://cdn.smarter.sh/ui-chat/app-loader.js): a script to insert the react app build artifacts into the DOM.
 
 ### Hello world app
 
-Note that `make build` also generates a simple '[hello-world.html](https://cdn.platform.smarter.sh/ui-chat/hello-world.html)' app that demonstrates how to integrate Smarter Chat to an existing web page.
+Note that `make build` also generates a simple '[hello-world.html](https://cdn.smarter.sh/ui-chat/hello-world.html)' app that demonstrates how to integrate Smarter Chat to an existing web page.
 
 ### Architecture
 

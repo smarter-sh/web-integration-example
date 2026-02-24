@@ -1,6 +1,18 @@
 # ---------------------------------------------------------
 # Makefile for the React.js app
 # ---------------------------------------------------------
+ifneq (,$(wildcard .env))
+	include .env
+	export
+else
+	$(shell cp .env.example .env)
+	include .env
+	export
+endif
+
+PLATFORM_SUBDOMAIN := $(if $(VITE_PLATFORM_SUBDOMAIN),$(VITE_PLATFORM_SUBDOMAIN),platform)
+ROOT_DOMAIN := $(if $(VITE_ROOT_DOMAIN),$(VITE_ROOT_DOMAIN),smarter.sh)
+
 
 # Set environment variables based on the git branch name
 # aws resources were created by Terraform in the smarter-infrastructure repository
@@ -8,43 +20,41 @@
 BRANCH_NAME := $(shell git rev-parse --abbrev-ref HEAD)
 TARGET_FOLDER := ui-chat
 ifeq ($(BRANCH_NAME),main)
-    ENVIRONMENT := prod
-    BUCKET := platform.smarter.sh
-    DISTRIBUTION_ID := E3RBVI08PL6I04
-    URL := https://cdn.platform.smarter.sh/$(TARGET_FOLDER)/
+	ENVIRONMENT := prod
+	BUCKET := $(ENVIRONMENT).$(PLATFORM_SUBDOMAIN).$(ROOT_DOMAIN)
+	DISTRIBUTION_ID := EU9Z3U26T37R2
+	URL := https://cdn.$(PLATFORM_SUBDOMAIN).$(ROOT_DOMAIN)/$(TARGET_FOLDER)/
 else ifeq ($(BRANCH_NAME),alpha)
-    ENVIRONMENT := alpha
-    BUCKET := alpha.platform.smarter.sh
-    DISTRIBUTION_ID := E3JWACRWT53O2W
-    URL := https://cdn.alpha.platform.smarter.sh/$(TARGET_FOLDER)/
+	ENVIRONMENT := alpha
+	BUCKET := $(ENVIRONMENT).$(PLATFORM_SUBDOMAIN).$(ROOT_DOMAIN)
+	DISTRIBUTION_ID := E2GQHZYQISYKSG
+	URL := https://cdn.alpha.$(PLATFORM_SUBDOMAIN).$(ROOT_DOMAIN)/$(TARGET_FOLDER)/
 else ifeq ($(BRANCH_NAME),beta)
-    ENVIRONMENT := beta
-    BUCKET := beta.platform.smarter.sh
-    DISTRIBUTION_ID := E35HUO4KP86MSQ
-    URL := https://cdn.beta.platform.smarter.sh/$(TARGET_FOLDER)/
+	ENVIRONMENT := beta
+	BUCKET := $(ENVIRONMENT).$(PLATFORM_SUBDOMAIN).$(ROOT_DOMAIN)
+	DISTRIBUTION_ID := E2GQHZYQISYKSG
+	URL := https://cdn.beta.$(PLATFORM_SUBDOMAIN).$(ROOT_DOMAIN)/$(TARGET_FOLDER)/
 else
-    ENVIRONMENT := $(BRANCH_NAME)
-    BUCKET := no-bucket
-    DISTRIBUTION_ID := NO_DISTRIBUTION_ID
-    URL := ''
+	ENVIRONMENT := $(BRANCH_NAME)
+	BUCKET := no-bucket
+	DISTRIBUTION_ID := NO_DISTRIBUTION_ID
+	URL := ''
 endif
 
 S3_TARGET := s3://$(BUCKET)/$(TARGET_FOLDER)
 
 # Detect the operating system and set the shell accordingly
 SHELL := /bin/bash
-include .env
 export PATH := /usr/local/bin:$(PATH)
-export
 
 ifeq ($(OS),Windows_NT)
-    AWS_CLI := aws
-    PYTHON := python.exe
-    ACTIVATE_VENV := venv\Scripts\activate
+	AWS_CLI := aws
+	PYTHON := python.exe
+	ACTIVATE_VENV := venv\Scripts\activate
 else
-    AWS_CLI := /opt/homebrew/bin/aws
-    PYTHON := python3.12
-    ACTIVATE_VENV := source venv/bin/activate
+	AWS_CLI := /opt/homebrew/bin/aws
+	PYTHON := python3.12
+	ACTIVATE_VENV := source venv/bin/activate
 endif
 PIP := $(PYTHON) -m pip
 
@@ -57,6 +67,7 @@ endif
 .PHONY: help clean npm-check analyze pre-commit lint update python-check python-init init run build release aws-verify-bucket aws-sync-s3 aws-bust-cache
 
 all: help
+
 
 # ---------------------------------------------------------
 # Anciallary tasks
@@ -125,6 +136,7 @@ build:
 	@echo 'Building the React app...'
 	rm -rf build
 	npm install
+	echo "VITE_ENVIRONMENT=$(ENVIRONMENT)"
 	export VITE_ENVIRONMENT=$(ENVIRONMENT) && npm run build
 
 aws-verify-bucket:
@@ -134,7 +146,7 @@ aws-verify-bucket:
 	@echo 'Checking if the S3 bucket $(BUCKET) exists...'
 	$(AWS_CLI) s3 ls $(BUCKET) || { echo "aws s3 bucket $(BUCKET) does not exist. Aborting."; exit 1; }
 	@echo 'Checking if the S3 bucket folder $(S3_TARGET) exists...'
-	$(AWS_CLI) s3 ls $(S3_TARGET) || $(AWS_CLI) s3 put-object --bucket $(BUCKET) --key $(TARGET_FOLDER)/
+	$(AWS_CLI) s3 ls $(S3_TARGET) || $(AWS_CLI) s3api put-object --bucket $(BUCKET) --key $(TARGET_FOLDER)/
 
 aws-sync-s3:
     # ------------------------
@@ -168,6 +180,9 @@ release:
     # 2. Upload to AWS S3
     # 3. Invalidate all items in the AWS Cloudfront CDN.
     #---------------------------------------------------------
+	echo "ROOT_DOMAIN: $(ROOT_DOMAIN)"
+	echo "PLATFORM_SUBDOMAIN: $(PLATFORM_SUBDOMAIN)"
+
 	make build
 	make aws-verify-bucket
 	make aws-sync-s3
