@@ -8,6 +8,8 @@
 
 Demonstrates the basic pattern for integrating a [@smarter.sh/ui-chat](https://www.npmjs.com/package/@smarter.sh/ui-chat) npm component into an existing web page. This is a generic integration pattern that is intended to facilitate plugin tool development for any ecosystem, including for example, Microsoft Dynamics, Microsoft Sharepoint, SAP, salesforce.com, Wordpress, Drupal, Wix, Squarespace, Shopify, and others.
 
+See also: [Read the Docs: Production Deployment Guide](https://docs.smarter.sh/en/latest/smarter-platform/production-deployment.html)
+
 Injects a lightweight react.js app into the DOM. The app itself is freely downloadable at [@smarter.sh/ui-chat](https://www.npmjs.com/package/@smarter.sh/ui-chat), or alternatively you can fork [https://github.com/smarter-sh/smarter-chat](https://github.com/smarter-sh/smarter-chat). See [Smarter Technical Overview](./doc/README.md)
 
 ![Basic Usage](./doc/img/readme-usage4.png)
