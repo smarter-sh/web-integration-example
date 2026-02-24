@@ -14,8 +14,9 @@ Injects a lightweight react.js app into the DOM. The app itself is freely downlo
 
 ## Usage (Smarter Deployment)
 
-If you working on a production deployment of the Smarter Web Console, the following example
-would publishe the React component to https://cdn.alpha.platform.example.com.
+If you are working on a production deployment of the Smarter Web Console, the following example
+would publish the React Chat component to https://cdn.alpha.platform.example.com. This assumes that
+you have already build your AWS cloud infrastructure using [smarter-sh/smarter-infrastructure](https://github.com/smarter-sh/smarter-infrastructure).
 
 ```console
 
