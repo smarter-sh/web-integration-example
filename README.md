@@ -4,15 +4,29 @@
 <img src="https://img.shields.io/badge/Smarter.sh-orange?style=flat&logo=appveyor&logoColor=white" height="32">
 </a>
 
-# Smarter Workbench
+# Smarter Web Integration Toolkit
 
-Demonstrates the basic pattern for integrating a SmarterChat npm component into an existing web page. This is a generic integration pattern that is intended to facilitate plugin tool development for any ecosystem, including for example, Microsoft Dynamics, Microsoft Sharepoint, SAP, salesforce.com, Wordpress, Drupal, Wix, Squarespace, Shopify, and others.
+Demonstrates the basic pattern for integrating a [@smarter.sh/ui-chat](https://www.npmjs.com/package/@smarter.sh/ui-chat) npm component into an existing web page. This is a generic integration pattern that is intended to facilitate plugin tool development for any ecosystem, including for example, Microsoft Dynamics, Microsoft Sharepoint, SAP, salesforce.com, Wordpress, Drupal, Wix, Squarespace, Shopify, and others.
 
 Injects a lightweight react.js app into the DOM. The app itself is freely downloadable at [@smarter.sh/ui-chat](https://www.npmjs.com/package/@smarter.sh/ui-chat), or alternatively you can fork [https://github.com/smarter-sh/smarter-chat](https://github.com/smarter-sh/smarter-chat). See [Smarter Technical Overview](./doc/README.md)
 
 ![Basic Usage](./doc/img/readme-usage4.png)
 
-## Usage: integrate to an existing web page
+## Usage (Smarter Deployment)
+
+If you working on a production deployment of the Smarter Web Console, the following example
+would publishe the React component to https://cdn.alpha.platform.example.com.
+
+```console
+
+export VITE_ROOT_DOMAIN=example.com
+export VITE_PLATFORM_SUBDOMAIN=platform
+
+git checkout alpha
+make release
+```
+
+## Usage (integrate to an existing web page)
 
 Pass an authenticated chatbot api url that works with any chatbot associated with your Smarter account, regardless of whether it has been deployed.
 
