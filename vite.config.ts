@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import { comlink } from "vite-plugin-comlink";
 import { execSync } from "child_process";
+import { platform } from "os";
 
 // Get current git branch name synchronously (outside the exported function)
 let subdomain = "";
@@ -20,6 +21,9 @@ export default defineConfig(({ mode }) => {
 
   const rootDomain = env.VITE_ROOT_DOMAIN;
   const platformSubdomain = env.VITE_PLATFORM_SUBDOMAIN;
+  if (subdomain == platformSubdomain || subdomain === platformSubdomain + ".") {
+    subdomain = "";
+  }
 
 
   // see smarter_settings.environment_cdn_url

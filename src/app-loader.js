@@ -1,4 +1,4 @@
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 /* ----------------------------------------------------------------------------
   SmarterChat app Loader.
   This file originates from https://github.com/smarter-sh/web-integration-example/blob/main/src/public/app-loader.js
