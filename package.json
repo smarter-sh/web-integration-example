@@ -46,7 +46,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@smarter.sh/ui-chat": "0.2.14",
+    "@smarter.sh/ui-chat": "0.3.0",
     "dotenv": "^17.3.1"
   },
   "devDependencies": {
@@ -71,6 +71,11 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.18",
     "prettier": "^3.4.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^5.5.0",
+    "react-modal": "^3.16.3",
     "standard": "^17.1.2",
     "typescript": "^5.7.3",
     "vite": "^7.0.0",
@@ -78,10 +83,10 @@
   },
   "peerDependencies": {
     "@chatscope/chat-ui-kit-react": "^2.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-helmet": "^6.1.0",
-    "react-icons": "^5.4.0",
+    "react-icons": "^5.5.0",
     "react-modal": "^3.16.3",
     "styled-components": "^6.1.15"
   }
