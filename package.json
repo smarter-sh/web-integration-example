@@ -63,7 +63,7 @@
     "@vitejs/plugin-react-swc": "^4.2.0",
     "@vitejs/plugin-react": "^5.1.0",
     "@vituum/vite-plugin-postcss": "^1.1.0",
-    "eslint": "^9.19.0",
+    "eslint": "^10.0.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-n": "^17.15.1",
     "eslint-plugin-promise": "^7.2.1",
