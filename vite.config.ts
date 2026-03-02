@@ -24,10 +24,14 @@ export default defineConfig(({ mode }) => {
   if (subdomain == platformSubdomain || subdomain === platformSubdomain + ".") {
     subdomain = "";
   }
+  if (subdomain === "main." || subdomain === "main") {
+    subdomain = "";
+  }
 
 
   // see smarter_settings.environment_cdn_url
   // https://github.com/smarter-sh/smarter/blob/beta/smarter/smarter/common/conf.py#L523
+  // https://cdn.main.ubc.smarter.sh/ui-chat/assets/main-C617wr5w.css
   const CDN_HOST_BASE_URL = "https://cdn." + subdomain + platformSubdomain + "." + rootDomain + "/ui-chat/";
 
   console.log("smarter-workbench app-loader subdomain:", subdomain.replace(/\./g, ""));
